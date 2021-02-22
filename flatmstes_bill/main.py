@@ -1,3 +1,5 @@
+import webbrowser
+
 from fpdf import FPDF
 
 class Bill:
@@ -33,36 +35,51 @@ class PdfReport:
     """
 
     def __init__(self, filename):
-        self.fiilename = filename
+        self.filename = filename
 
     def generate(self, flatmate1, flatmate2, bill):
+
+        flatmate_pay1 = str(round(flatmate1.pays(bill=bill, flatmate=flatmate2), 2))
+        flatmate_pay2 = str(round(flatmate2.pays(bill=bill, flatmate=flatmate1), 2))
+
         # create a pdf object
         pdf = FPDF(orientation='P', unit='pt', format='Letter')
 
         # adding page to the document
         pdf.add_page()
 
+        # add image
+        pdf.image(name="house.png", w=40, h=40)
+
         # select the font for the doc
-        pdf.set_font(family='Arial', style='B', size=16)
+        pdf.set_font(family='Arial', style='B', size=24)
 
         # report title
-        pdf.cell(w=0, h=80, txt='Flatmates Bill', border=1, align='C', ln=1)
+        pdf.cell(w=0, h=80, txt='Flatmates Bill', align='C', ln=1)
 
         # report labels
-        pdf.cell(w=100, h=40, txt='Period', border=1)
-        pdf.cell(w=150, h=40, txt=bill.period, border=1, ln=1)
+        pdf.set_font(family='Arial', style='B', size=12)
+        pdf.cell(w=100, h=40, txt='Period')
+        pdf.cell(w=150, h=40, txt=bill.period, ln=1)
 
         # flatmates bill data
-        pdf.cell(w=100, h=40, txt=flatmate1.name, border=1)
-        pdf.cell(w=150, h=40, txt=str(flatmate1.pays(bill=bill, flatmate=flatmate1)), border=1, ln=1)
+        pdf.set_font(family='Arial', size=12)
+        pdf.cell(w=100, h=40, txt=flatmate1.name)
+        pdf.cell(w=150, h=40, txt=flatmate_pay1, ln=1)
+
+        pdf.cell(w=100, h=40, txt=flatmate2.name, border=1)
+        pdf.cell(w=150, h=40, txt=str(flatmate_pay2), border=1, ln=1)
 
         # save report as pdf file
-        pdf.output(self.fiilename)
+        pdf.output(self.filename)
+
+        # open report in the browser
+        webbrowser.open(self.filename)
 
 
-bill = Bill(amount=120, period="January 2021")
+bill = Bill(amount=125, period="January 2021")
 jude = Flatmate(name="Jude", day_in_house=20)
-pascal = Flatmate(name="Pascal", day_in_house=25)
+pascal = Flatmate(name="Pascal", day_in_house=55)
 
 payment = jude.pays(bill=bill, flatmate=pascal)
 
