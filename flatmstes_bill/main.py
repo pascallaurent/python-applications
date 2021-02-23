@@ -67,8 +67,8 @@ class PdfReport:
         pdf.cell(w=100, h=40, txt=flatmate1.name)
         pdf.cell(w=150, h=40, txt=flatmate_pay1, ln=1)
 
-        pdf.cell(w=100, h=40, txt=flatmate2.name, border=1)
-        pdf.cell(w=150, h=40, txt=str(flatmate_pay2), border=1, ln=1)
+        pdf.cell(w=100, h=40, txt=flatmate2.name)
+        pdf.cell(w=150, h=40, txt=str(flatmate_pay2), ln=1)
 
         # save report as pdf file
         pdf.output(self.filename)
@@ -76,12 +76,19 @@ class PdfReport:
         # open report in the browser
         webbrowser.open(self.filename)
 
+bill_amount = float(input("Enter the bill amount: "))
+bill_period = input("Enter the period: ")
+bill = Bill(amount=bill_amount, period=bill_period)
 
-bill = Bill(amount=125, period="January 2021")
-jude = Flatmate(name="Jude", day_in_house=20)
-pascal = Flatmate(name="Pascal", day_in_house=55)
+user_name = input("What is your name? ")
+days_in_house1 = int(input(f"Hoaw many days {user_name} are you staying in the house? "))
+user_name1 = Flatmate(name=user_name, day_in_house=days_in_house1)
 
-payment = jude.pays(bill=bill, flatmate=pascal)
+user_name = input("What is your name? ")
+days_in_house2 = int(input(f"How many days {user_name} are you staying in the house? "))
+user_name2 = Flatmate(name=user_name, day_in_house=days_in_house2)
+
+payment = user_name1.pays(bill=bill, flatmate=user_name2)
 
 report = PdfReport('report.pdf')
-report.generate(flatmate1=jude, flatmate2=pascal, bill=bill)
+report.generate(flatmate1=user_name1, flatmate2=user_name2, bill=bill)
