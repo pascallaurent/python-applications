@@ -1,6 +1,8 @@
 from bill import Bill
 from flat import Flatmate
 from reports import PdfReport
+from fileupload import FileUpload
+
 
 bill_amount = float(input("Enter the bill amount: "))
 bill_period = input("Enter the period: ")
@@ -19,3 +21,7 @@ flatmate2 = Flatmate(name=user_name, day_in_house=days_in_house)
 # Generate billing report
 report = PdfReport(filename=f"{bill.period}.pdf")
 report.generate(flatmate1=flatmate1, bill=bill, flatmate2=flatmate2)
+
+# upload file
+fileurl = FileUpload(filepath=f"{bill.period}.pdf")
+print(fileurl.upload())
